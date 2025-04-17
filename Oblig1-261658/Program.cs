@@ -1,4 +1,11 @@
+using Microsoft.EntityFrameworkCore;
+using Oblig1_261658.Data;
+
 var builder = WebApplication.CreateBuilder(args);
+
+// Legg til database-tilkobling (SQL Server eller SQLite)
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();

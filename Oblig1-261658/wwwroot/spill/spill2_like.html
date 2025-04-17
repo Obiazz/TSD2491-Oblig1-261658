@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,21 +11,27 @@
             width: 50%;
             margin: 20px auto;
         }
+
         td {
             width: 50px;
             height: 50px;
             border: 1px solid #000;
             cursor: pointer;
         }
-        .counter, .message, .restart {
+
+        .counter,
+        .message,
+        .restart {
             text-align: center;
             margin-top: 20px;
         }
+
         .restart {
             display: none;
         }
     </style>
 </head>
+
 <body>
     <table id="colorTable"></table>
     <div class="counter">Antall celler fjernet: <span id="removedCount">0</span></div>
@@ -81,7 +88,7 @@
                     removedCount += 2;
                     removedCountElement.textContent = removedCount;
                     if (removedCount === 16) {
-                        <!--gameMessageElement.textContent = "Spillet er ferdig!";-->
+                        gameMessageElement.textContent = "Spillet er ferdig!";
                         restartDiv.style.display = "block";
                     }
                 }
@@ -91,7 +98,7 @@
         }
 
         // Event listener for restart button
-        restartButton.addEventListener("click", function() {
+        restartButton.addEventListener("click", function () {
             removedCount = 0;
             removedCountElement.textContent = removedCount;
             gameMessageElement.textContent = "";
@@ -103,4 +110,5 @@
         initializeTable();
     </script>
 </body>
+
 </html>

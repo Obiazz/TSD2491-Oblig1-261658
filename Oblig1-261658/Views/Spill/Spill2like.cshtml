@@ -1,7 +1,40 @@
 @{
-    ViewData["Title"] = "Spill 2-like";
+    ViewData["Title"] = "Spill";
 }
 
-<h1>2-Like Spill</h1>
+<h2>2-Like Spill</h2>
 
 <iframe src="~/spill/spill2_like.html" width="100%" height="600px" frameborder="0"></iframe>
+
+
+<div style="text-align: center; margin-top: 20px;">
+    <label for="brukerId">Skriv inn din bruker-ID:</label>
+    <input type="number" id="brukerId" placeholder="F.eks. 1" style="margin-left: 10px;" />
+    <button onclick="registrerSpill()">Start spill</button>
+</div>
+
+<table id="colorTable" style="margin: 20px auto;"></table>
+<div class="counter" style="text-align: center;">Antall celler fjernet: <span id="removedCount">0</span></div>
+<div class="message" id="gameMessage" style="text-align: center;"></div>
+<div class="restart" style="text-align: center; display: none;">
+    <button id="restartButton">Spill på nytt</button>
+</div>
+
+<script>
+    function registrerSpill() {
+        const id = document.getElementById("brukerId").value;
+
+        if (!id) return;
+
+        fetch('/Bruker/FullforSpillMedId?id=' + encodeURIComponent(id), {
+            method: 'POST'
+        })
+            .then(response => {
+                if (response.ok) {
+                    alert("Bruker oppdatert!");
+                } else {
+                    alert("Noe gikk galt. Fikk ikke oppdatert bruker.");
+                }
+            });
+    }
+</script>

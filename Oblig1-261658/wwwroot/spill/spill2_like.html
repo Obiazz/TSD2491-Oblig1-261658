@@ -49,6 +49,17 @@
         const restartDiv = document.querySelector(".restart");
         let firstClickedCell = null;
         let removedCount = 0;
+        let brukerId = null;
+
+
+        function startSpill(id) {
+            brukerId = id;
+            removedCount = 0;
+            removedCountElement.textContent = removedCount;
+            gameMessageElement.textContent = "";
+            restartDiv.style.display = "none";
+            initializeTable();
+        }
 
         // Function to shuffle the colors array
         function shuffle(array) {
@@ -90,6 +101,9 @@
                     if (removedCount === 16) {
                         gameMessageElement.textContent = "Spillet er ferdig!";
                         restartDiv.style.display = "block";
+                        if (window.parent) {
+                            window.parent.postMessage("spillFullfort", "*");
+                        }
                     }
                 }
                 firstClickedCell.style.outline = "none"; // Remove the outline

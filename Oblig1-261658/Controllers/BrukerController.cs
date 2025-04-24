@@ -163,8 +163,19 @@ namespace Oblig1_261658.Controllers
         await _context.SaveChangesAsync();
 
         return Ok(); // Returner HTTP 200 OK
-}
-    
+        }
+
+        [HttpGet]
+        [Route("Bruker/Rangering")]
+        public async Task<IActionResult> Rangering()
+        {
+            var rangering = await _context.Bruker
+                .OrderByDescending(b => b.AntallSpill)
+                .ToListAsync();
+
+            return Json(rangering);
+        }
+
 
         private bool BrukerExists(int id)
         {

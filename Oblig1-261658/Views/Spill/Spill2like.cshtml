@@ -1,0 +1,76 @@
+@{
+    ViewData["Title"] = "Spill";
+}
+
+<h2>2-Like Spill</h2>
+
+<div style="text-align: center; margin-top: 20px;">
+    <label for="brukerId">Skriv inn din bruker-ID:</label>
+    <input type="number" id="brukerId" placeholder="F.eks. 1" style="margin-left: 10px;" />
+    <button onclick="registrerSpill()">Start spill</button>
+</div>
+
+<!-- Spillcontainer skjult til spill starter -->
+<div id="spillContainer" style="display: none;">
+    <iframe src="~/spill/spill2_like.html" width="100%" height="600px" frameborder="0" id="spillIframe"></iframe>
+</div>
+
+<h3 style="text-align: center;"> Rangering</h3>
+<ul id="rangeringListe" style="text-align: center; list-style: none; padding: 0;"></ul>
+
+<script>
+    function registrerSpill() {
+        const id = document.getElementById("brukerId").value;
+
+        if (!id) {
+            alert("Vennligst skriv inn en ID");
+            return;
+        }
+
+        // Vis spillet
+        const spillDiv = document.getElementById("spillContainer");
+        spillDiv.style.display = "block";
+
+        // Send ID til spillet (via postMessage)
+        const iframe = document.getElementById("spillIframe");
+        iframe.contentWindow.postMessage({ brukerId: id }, "*");
+    }
+
+    async function hentRangering() {
+        const response = await fetch('/Bruker/Rangering');
+        if (response.ok) {
+            const data = await response.json();
+            const liste = document.getElementById("rangeringListe");
+            liste.innerHTML = "";
+            data.forEach((bruker, index) => {
+                const li = document.createElement("li");
+                li.textContent = `${index + 1}. ${bruker.navn} – ${bruker.antallSpill} spill`;
+                liste.appendChild(li);
+            });
+        } else {
+            console.error("Klarte ikke hente rangering");
+        }
+    }
+
+    // Spill sender beskjed når det er fullført
+    window.addEventListener("message", (event) => {
+        if (event.data === "spillFullfort") {
+            const id = document.getElementById("brukerId").value;
+
+            fetch('/Bruker/FullforSpillMedId?id=' + encodeURIComponent(id), {
+                method: 'POST'
+            }).then(response => {
+                if (response.ok) {
+                    alert("Spillet er ferdig og poeng er registrert!");
+                    hentRangering();
+                } else {
+                    alert("Noe gikk galt ved registrering.");
+                }
+            });
+        }
+    });
+
+    window.onload = function () {
+        hentRangering();
+    };
+</script>
